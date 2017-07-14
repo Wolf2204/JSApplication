@@ -1,0 +1,14 @@
+section {
+  display: flex;
+}
+section.player,
+section.computer {
+  min-width: 1000px;
+  min-height: 180px;
+  background: red;
+}
+section.game {
+  min-height: 250px;
+  min-width: 1000px;
+  background: yellow;
+}
