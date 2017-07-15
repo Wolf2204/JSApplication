@@ -12,3 +12,19 @@ section.game {
   min-width: 1000px;
   background: yellow;
 }
+section #deck {
+  position: fixed;
+  background: green;
+  margin-top: 30px;
+}
+section #deck img {
+  position: fixed;
+  margin-left: auto;
+}
+section div.deck1 img,
+section div.deck2 img {
+  position: fixed;
+}
+section img.suit {
+  transform: rotate(-90deg);
+}
