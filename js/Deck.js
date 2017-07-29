@@ -20,7 +20,8 @@
                         arg[i].push({
                             val: j,
                             card: deckLength + (j + number) + '.jpg',
-                            suit: suitCard[i]
+                            suit: suitCard[i],
+                            id: j + number
                         })
                     }
                     number += 9;

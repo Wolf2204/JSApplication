@@ -28,3 +28,11 @@ section div.deck2 img {
 section img.suit {
   transform: rotate(-90deg);
 }
+section #turn2 {
+  position: fixed;
+  top: 250px;
+}
+section #turn1 {
+  position: fixed;
+  top: 200px;
+}
