@@ -14,7 +14,6 @@ section.game {
 }
 section #deck {
   position: fixed;
-  background: green;
   margin-top: 30px;
 }
 section #deck img {

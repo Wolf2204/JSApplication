@@ -44,7 +44,7 @@
             value: function (suit) {
                 for (let i = 0; i < suit.length; i++) {
                     if (suit[0].suit === suit[i].suit) {
-                        suit[i].val = suit[i].val * 10;
+                        suit[i].val = suit[i].val * 100;
                     }
                     
                 }
