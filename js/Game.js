@@ -112,20 +112,20 @@
 
     Object.defineProperties(Game.prototype, {
         cardPosition: {
-            value: function (computerHand, playerHand, gameDeck) {
+            value: function (computerHandJs, playerHandJs, gameDeckJs) {
                 let cardsForGame = document.querySelectorAll('#deck img');
                 let src = 'images/cardback.jpg';
-                if (gameDeck.length !== 0) {
+                if (gameDeckJs.length !== 0) {
 
                     cardsForGame = [...cardsForGame];
                     let position = 1120;
                     cardsForGame.forEach(function (v, i) {
                         v.src = src;
                         v.style.left = `${position}px`;
-                        v.id = gameDeck[i].id;
+                        v.id = gameDeckJs[i].id;
                         position += 1
                     });
-                    cardsForGame[0].src = gameDeck[0].card;
+                    cardsForGame[0].src = gameDeckJs[0].card;
                     cardsForGame[0].classList.add('suit');
                     cardsForGame[0].style.left = '1080px';
                 }
@@ -136,7 +136,7 @@
                 let position1 = 100;
                 for (let i = 0; i < computerCards.length; i++) {
                     computerCards[i].src = src;
-                    computerCards[i].id = computerHand[i].id;
+                    computerCards[i].id = computerHandJs[i].id;
                     computerCards[i].style.left = `${position1}px`;
                     computerCards[i].style.marginLeft = 0 + 'px';
                     position1 += 40
@@ -144,8 +144,8 @@
 
                 let position2 = 100;
                 for (let i = 0; i < playerCards.length; i++) {
-                    playerCards[i].src = playerHand[i].card;
-                    playerCards[i].id = playerHand[i].id;
+                    playerCards[i].src = playerHandJs[i].card;
+                    playerCards[i].id = playerHandJs[i].id;
                     playerCards[i].style.left = `${position2}px`;
                     playerCards[i].style.marginLeft = 0 + 'px';
                     position2 += 40
@@ -338,10 +338,25 @@
         cardForTopPlayer: {
             value: function (htmlCard) {
                 let card = [];
+                let allCardsOnBoard = [];
                 for (let i = 0; i < playerHandJs.length; i++) {
                     if (htmlCard.id === `${playerHandJs[i].id}`) {
                         card.push(playerHandJs.slice(i, i + 1).pop());
                         cardsForTurnJS.forEach(function (v) {
+                            allCardsOnBoard.push(v);
+                        });
+                        if (allCardsOnBoard.length > 1) {
+                            for (let j = 0; j < allCardsOnBoard.length; j++) {
+                                for(let k = j+1; k < allCardsOnBoard.length; k++) {
+                                    if (allCardsOnBoard[k].val === allCardsOnBoard[j].val || allCardsOnBoard[j].val === allCardsOnBoard[k].val * 100) {
+                                        allCardsOnBoard.splice(k, 1);
+                                    }
+                                }
+                            }
+                        }
+
+
+                        allCardsOnBoard.forEach(function (v) {
                             if (card[0].val === v.val || card[0].val === v.val * 100 || card[0].val * 100 === v.val) {
                                 topOrBottom.appendChild(htmlCard);
                                 htmlCard.style.marginLeft = `${styleLeftForTurn}px`;
@@ -441,14 +456,12 @@
                                     v.style.marginLeft = `${styleLeftForTurn}px`;
                                     v.src = computerHandJs[i].card;
                                     v.id = computerHandJs[i].id;
-                                    cardsForTurnJS.push(computerHandJs.splice(i, 1).shift());
+                                    cardsForTurnJS.push(computerHandJs.splice(i, 1)[0]);
                                     a = 1;
                                 }
                             });
                         }
 
-
-                        // }
                     }
                 }
 
@@ -488,26 +501,15 @@
                 arr4 = [];
                 computerHandJs = [];
                 playerHandJs = [];
+                cardsForTurnJS = [];
                 let div = document.createElement('div');
                 let button = document.createElement('button');
                 let winner = document.createElement('p');
                 button.textContent = 'New Game';
-                button.addEventListener('click', function () {
-                    let img = document.querySelectorAll('img');
-                    img = [...img];
-                    img.forEach(function (v) {
-                        v.remove();
-                    });
-                    deck.deckList(arr1, arr2, arr3, arr4);
-                    deckList = arr1.concat(arr2, arr3, arr4);
-                    gameDeck = deck.randomDeck(deckList);
 
-                    players.handPlayers(computerHandJs, playerHandJs, gameDeck, boardForComputerCardsHtml, boardForPlayerCardsHtml, deckForGame);
-                    gameDurak.cardPosition(computerHandJs, playerHandJs, gameDeck);
-                    if (gameDurak.startGame(computerHandJs, playerHandJs) === 1) {
-                        gameDurak.turnComputer(computerHandJs, cardsForTurnTop, cardsForTurnBottom);
-                    }
-                    div.remove();
+                button.addEventListener('click', function () {
+                    window.location.reload();
+
                 });
                 div.style.width = '100%';
                 div.style.height = '100%';
