@@ -29,7 +29,7 @@
     let styleLeftForTurn = 10;
     let endTurn = document.querySelector('#end'),
         takeAllCards = document.querySelector('#take');
-
+    let result;
 
     boardForPlayerCardsHtml.addEventListener('click', function (event) {
         let imgCardsForTurnTop = cardsForTurnTop.querySelectorAll('img'),
@@ -125,7 +125,6 @@
                         v.id = gameDeck[i].id;
                         position += 1
                     });
-                    console.log(cardsForGame);
                     cardsForGame[0].src = gameDeck[0].card;
                     cardsForGame[0].classList.add('suit');
                     cardsForGame[0].style.left = '1080px';
@@ -278,10 +277,14 @@
                     gameDurak.cardPosition(computerHandJs, playerHandJs, gameDeck);
 
                 } else {
-                    if (playerHandJs.length === 0 && gameDeck.length === 0 && computerHandJs.length === 0) {
-                        alert('Ничья');
+                    if (playerHandJs.length === 0 && gameDeck.length === 0 && computerHandJs.length === 1) {
+                        gameDurak.turnComputer(computerHandJs, playerHandJs, cardsForTurnTop, cardsForTurnBottom);
+                    } else if (playerHandJs.length === 0 && gameDeck.length === 0 && computerHandJs.length === 0) {
+                        result = 'Ничья';
+                        gameDurak.resultOfGame(result);
                     } else if (playerHandJs.length === 0 && gameDeck.length === 0) {
-                        alert('Вы победили');
+                        result = 'Вы победили';
+                        gameDurak.resultOfGame(result);
                     } else if (playerHandJs.length === 0) {
                         let imgCardsForTurnTop = cardsForTurnTop.querySelectorAll('img');
                         let imgCardsForTurnBottom = cardsForTurnBottom.querySelectorAll('img');
@@ -309,10 +312,14 @@
                     gameDurak.cardPosition(computerHandJs, playerHandJs, gameDeck);
                     gameDurak.turnComputer(computerHandJs, playerHandJs, cardsForTurnTop, cardsForTurnBottom);
                 } else {
-                    if (playerHandJs.length === 0 && gameDeck.length === 0 && computerHandJs.length === 0) {
-                        alert('Ничья');
+                    if (playerHandJs.length === 1 && gameDeck.length === 0 && computerHandJs.length === 0) {
+
+                    } else if (playerHandJs.length === 0 && gameDeck.length === 0 && computerHandJs.length === 0) {
+                        result = 'Ничья';
+                        gameDurak.resultOfGame(result);
                     } else if (gameDeck.length === 0 && computerHandJs.length === 0) {
-                        alert('Вы проиграли');
+                        result = 'Вы проиграли';
+                        gameDurak.resultOfGame(result);
                     } else if (computerHandJs.length === 0 && imgCardsForTurnTop.length === imgCardsForTurnBottom) {
                         gameDurak.clearGameBoard(cardsForTurnJS);
                         gameDurak.takingCards(computerHandJs, playerHandJs, gameDeck);
@@ -426,23 +433,22 @@
                     card = getMinValue(card);
                     for (let i = 0; i < computerHandJs.length; i++) {
 
-                            if (card.val === computerHandJs[i].val && card.suit === computerHandJs[i].suit) {
-                                computerHandHtml.forEach(function (v) {
+                        if (card.val === computerHandJs[i].val && card.suit === computerHandJs[i].suit) {
+                            computerHandHtml.forEach(function (v) {
 
-                                    if (v.id === `${computerHandJs[i].id}` && a === 0) {
-                                        topOrBottom.appendChild(v);
-                                        v.style.marginLeft = `${styleLeftForTurn}px`;
-                                        v.src = computerHandJs[i].card;
-                                        v.id = computerHandJs[i].id;
-                                        cardsForTurnJS.push(computerHandJs.splice(i, 1).shift());
-                                        a = 1;
-                                    }
-                                });
-                            }
+                                if (v.id === `${computerHandJs[i].id}` && a === 0) {
+                                    topOrBottom.appendChild(v);
+                                    v.style.marginLeft = `${styleLeftForTurn}px`;
+                                    v.src = computerHandJs[i].card;
+                                    v.id = computerHandJs[i].id;
+                                    cardsForTurnJS.push(computerHandJs.splice(i, 1).shift());
+                                    a = 1;
+                                }
+                            });
+                        }
 
 
-
-                       // }
+                        // }
                     }
                 }
 
@@ -472,6 +478,53 @@
                 });
 
             }
+        },
+
+        resultOfGame: {
+            value: function (value) {
+                arr1 = [];
+                arr2 = [];
+                arr3 = [];
+                arr4 = [];
+                computerHandJs = [];
+                playerHandJs = [];
+                let div = document.createElement('div');
+                let button = document.createElement('button');
+                let winner = document.createElement('p');
+                button.textContent = 'New Game';
+                button.addEventListener('click', function () {
+                    let img = document.querySelectorAll('img');
+                    img = [...img];
+                    img.forEach(function (v) {
+                        v.remove();
+                    });
+                    deck.deckList(arr1, arr2, arr3, arr4);
+                    deckList = arr1.concat(arr2, arr3, arr4);
+                    gameDeck = deck.randomDeck(deckList);
+
+                    players.handPlayers(computerHandJs, playerHandJs, gameDeck, boardForComputerCardsHtml, boardForPlayerCardsHtml, deckForGame);
+                    gameDurak.cardPosition(computerHandJs, playerHandJs, gameDeck);
+                    if (gameDurak.startGame(computerHandJs, playerHandJs) === 1) {
+                        gameDurak.turnComputer(computerHandJs, cardsForTurnTop, cardsForTurnBottom);
+                    }
+                    div.remove();
+                });
+                div.style.width = '100%';
+                div.style.height = '100%';
+                div.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+                div.style.position = 'fixed';
+                div.style.zIndex = '9999';
+                div.style.top = '0';
+                div.style.left = '0';
+                div.style.textAlign = 'center';
+                div.style.verticalAlign = 'center';
+                winner.style.color = 'white';
+                winner.style.fontSize = '20pt';
+                winner.textContent = value;
+                div.appendChild(winner);
+                div.appendChild(button);
+                document.body.appendChild(div);
+            }
         }
 
     });
@@ -483,7 +536,6 @@
     if (gameDurak.startGame(computerHandJs, playerHandJs) === 1) {
         gameDurak.turnComputer(computerHandJs, cardsForTurnTop, cardsForTurnBottom);
     }
-
 
 
 }());
