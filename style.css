@@ -41,7 +41,7 @@ body {
 body .buttons {
   background: green;
 }
-body .buttons button {
+.button {
   width: 150px;
   height: 30px;
   text-decoration: none;
@@ -54,9 +54,16 @@ body .buttons button {
   outline: 0 none;
   transition: color 0.5s linear, text-shadow 0.5s linear;
 }
-body .buttons button:hover {
+.button:hover {
   transition: color 0.5s linear, text-shadow 0.5s linear;
   color: #fff;
   text-shadow: 0 0 20px rgba(223, 206, 228, 0.5), 0 0 10px rgba(223, 206, 228, 0.4), 0 0 2px #2a153c;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+}
+#count {
+  position: absolute;
+  left: 1150px;
+  top: 50px;
+  font-size: 20pt;
+  color: white;
 }

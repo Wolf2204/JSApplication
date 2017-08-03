@@ -1,5 +1,13 @@
 (function () {
     'use strict';
+    let countPlayer = 0,
+        countComputer = 0;
+    let countPlayerHtml = document.querySelector('#playerCount'),
+    countComputerHtml = document.querySelector('#computerCount');
+
+    countPlayerHtml.textContent = 'Игрок: ' + countPlayer;
+    countComputerHtml.textContent = 'Компьютер: ' + countComputer;
+
 
     let arr1 = [],
         arr2 = [],
@@ -277,7 +285,11 @@
                     gameDurak.cardPosition(computerHandJs, playerHandJs, gameDeck);
 
                 } else {
-                    if (playerHandJs.length === 0 && gameDeck.length === 0 && computerHandJs.length === 1) {
+                    if (gameDeck.length === 0 && computerHandJs.length === 0 && playerHandJs.length === 2) {
+                        result = 'Вы проиграли';
+                        gameDurak.resultOfGame(result);
+                        countComputer += 1;
+                    } else if (playerHandJs.length === 0 && gameDeck.length === 0 && computerHandJs.length === 1) {
                         gameDurak.turnComputer(computerHandJs, playerHandJs, cardsForTurnTop, cardsForTurnBottom);
                     } else if (playerHandJs.length === 0 && gameDeck.length === 0 && computerHandJs.length === 0) {
                         result = 'Ничья';
@@ -285,6 +297,7 @@
                     } else if (playerHandJs.length === 0 && gameDeck.length === 0) {
                         result = 'Вы победили';
                         gameDurak.resultOfGame(result);
+                        countPlayer += 1;
                     } else if (playerHandJs.length === 0) {
                         let imgCardsForTurnTop = cardsForTurnTop.querySelectorAll('img');
                         let imgCardsForTurnBottom = cardsForTurnBottom.querySelectorAll('img');
@@ -312,7 +325,11 @@
                     gameDurak.cardPosition(computerHandJs, playerHandJs, gameDeck);
                     gameDurak.turnComputer(computerHandJs, playerHandJs, cardsForTurnTop, cardsForTurnBottom);
                 } else {
-                    if (playerHandJs.length === 1 && gameDeck.length === 0 && computerHandJs.length === 0) {
+                    if (gameDeck.length === 0 && playerHandJs.length === 0 && computerHandJs.length === 2) {
+                        result = 'Вы победили';
+                        gameDurak.resultOfGame(result);
+                        countPlayer += 1;
+                    } else if (playerHandJs.length === 1 && gameDeck.length === 0 && computerHandJs.length === 0) {
 
                     } else if (playerHandJs.length === 0 && gameDeck.length === 0 && computerHandJs.length === 0) {
                         result = 'Ничья';
@@ -320,6 +337,7 @@
                     } else if (gameDeck.length === 0 && computerHandJs.length === 0) {
                         result = 'Вы проиграли';
                         gameDurak.resultOfGame(result);
+                        countComputer += 1;
                     } else if (computerHandJs.length === 0 && imgCardsForTurnTop.length === imgCardsForTurnBottom) {
                         gameDurak.clearGameBoard(cardsForTurnJS);
                         gameDurak.takingCards(computerHandJs, playerHandJs, gameDeck);
@@ -342,20 +360,19 @@
                 for (let i = 0; i < playerHandJs.length; i++) {
                     if (htmlCard.id === `${playerHandJs[i].id}`) {
                         card.push(playerHandJs.slice(i, i + 1).pop());
-                        cardsForTurnJS.forEach(function (v) {
-                            allCardsOnBoard.push(v);
-                        });
+                        allCardsOnBoard = cardsForTurnJS.slice();
                         if (allCardsOnBoard.length > 1) {
                             for (let j = 0; j < allCardsOnBoard.length; j++) {
-                                for(let k = j+1; k < allCardsOnBoard.length; k++) {
-                                    if (allCardsOnBoard[k].val === allCardsOnBoard[j].val || allCardsOnBoard[j].val === allCardsOnBoard[k].val * 100) {
+                                for (let k = j + 1; k < allCardsOnBoard.length; k++) {
+                                    if (allCardsOnBoard[j].val === allCardsOnBoard[k].val * 100) {
+                                        allCardsOnBoard.splice(j, 1);
+                                    }
+                                    if (allCardsOnBoard[k].val === allCardsOnBoard[j].val || allCardsOnBoard[j].val * 100 === allCardsOnBoard[k].val) {
                                         allCardsOnBoard.splice(k, 1);
                                     }
                                 }
                             }
                         }
-
-
                         allCardsOnBoard.forEach(function (v) {
                             if (card[0].val === v.val || card[0].val === v.val * 100 || card[0].val * 100 === v.val) {
                                 topOrBottom.appendChild(htmlCard);
@@ -408,19 +425,42 @@
                         }
                     }
                 }
-                if (card.length === 1) {
-                    let computerHandHtml = boardForComputerCardsHtml.querySelectorAll('img');
-                    computerHandHtml = [...computerHandHtml];
-                    computerHandHtml.forEach(function (v) {
-                        if (v.id === `${card[0].id}`) {
-                            topOrBottom.appendChild(v);
-                            v.style.marginLeft = `${styleLeftForTurn}px`;
-                            v.src = card[0].card;
-                            v.id = card[0].id;
 
+                if (card.length === 1) {
+                    if (card.val >= 100) {
+                        let result = Math.round(Math.random());
+                        if (result === 1) {
+                            let computerHandHtml = boardForComputerCardsHtml.querySelectorAll('img');
+                            computerHandHtml = [...computerHandHtml];
+                            computerHandHtml.forEach(function (v) {
+                                if (v.id === `${card[0].id}`) {
+                                    topOrBottom.appendChild(v);
+                                    v.style.marginLeft = `${styleLeftForTurn}px`;
+                                    v.src = card[0].card;
+                                    v.id = card[0].id;
+
+                                }
+                            });
+                            cardsForTurnJS.push(card.shift());
+                        } else {
+                            gameDurak.clearGameBoard(cardsForTurnJS);
+                            gameDurak.takingCards(computerHandJs, playerHandJs, gameDeck);
+                            gameDurak.cardPosition(computerHandJs, playerHandJs, gameDeck);
                         }
-                    });
-                    cardsForTurnJS.push(card.shift());
+                    } else {
+                        let computerHandHtml = boardForComputerCardsHtml.querySelectorAll('img');
+                        computerHandHtml = [...computerHandHtml];
+                        computerHandHtml.forEach(function (v) {
+                            if (v.id === `${card[0].id}`) {
+                                topOrBottom.appendChild(v);
+                                v.style.marginLeft = `${styleLeftForTurn}px`;
+                                v.src = card[0].card;
+                                v.id = card[0].id;
+
+                            }
+                        });
+                        cardsForTurnJS.push(card.shift());
+                    }
 
 
                 } else {
@@ -471,8 +511,11 @@
                     gameDurak.removeCardsFromGameBoard(boardForComputerCardsHtml);
                     gameDurak.takingCards(computerHandJs, playerHandJs, gameDeck);
                     gameDurak.cardPosition(computerHandJs, playerHandJs, gameDeck);
+                    gameDurak.checkComputer();
+
 
                 }
+
 
             }
         },
@@ -495,6 +538,7 @@
 
         resultOfGame: {
             value: function (value) {
+
                 arr1 = [];
                 arr2 = [];
                 arr3 = [];
@@ -506,9 +550,28 @@
                 let button = document.createElement('button');
                 let winner = document.createElement('p');
                 button.textContent = 'New Game';
+                button.classList.add('button');
 
                 button.addEventListener('click', function () {
-                    window.location.reload();
+                    let img = document.querySelectorAll('img');
+                    img.forEach(function (v) {
+                       v.remove();
+                    });
+                        //window.location.reload();
+                    div.remove();
+                    countPlayerHtml.textContent = 'Игрок: ' + countPlayer;
+                    countComputerHtml.textContent = 'Компьютер: ' + countComputer;
+                    deck.deckList(arr1, arr2, arr3, arr4);
+                    deckList = arr1.concat(arr2, arr3, arr4);
+                    gameDeck = deck.randomDeck(deckList);
+                    deck.suitValue(gameDeck);
+                    players.handPlayers(computerHandJs, playerHandJs, gameDeck, boardForComputerCardsHtml, boardForPlayerCardsHtml, deckForGame);
+                    gameDurak.cardPosition(computerHandJs, playerHandJs, gameDeck);
+                    if (gameDurak.startGame(computerHandJs, playerHandJs) === 1) {
+                        gameDurak.turnComputer(computerHandJs, cardsForTurnTop, cardsForTurnBottom);
+                    }
+
+
 
                 });
                 div.style.width = '100%';

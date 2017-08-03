@@ -41,27 +41,35 @@ body {
   border: 2px solid black;
   .buttons {
     background: green;
-    button {
-      width: 150px;
-      height: 30px;
-      text-decoration: none;
-      color: #a675b3;
-      text-align: center;
-      line-height: 20px;
-      font: normal 17px arial;
-      background: linear-gradient(#3b2751, #271739);
-      text-shadow: 0 0 21px rgba(223, 206, 228, 0.5), 0 -1px 0 #311d47;
-      outline: 0 none;
-      transition: color 0.5s linear, text-shadow 0.5s linear;
-      &:hover {
-        transition: color 0.5s linear, text-shadow 0.5s linear;
-        color: #fff;
-        text-shadow: 0 0 20px rgba(223, 206, 228, 0.5), 0 0 10px rgba(223, 206, 228, 0.4), 0 0 2px #2a153c;
-        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
 
-      }
-
-    }
   }
 }
+.button {
+  width: 150px;
+  height: 30px;
+  text-decoration: none;
+  color: #a675b3;
+  text-align: center;
+  line-height: 20px;
+  font: normal 17px arial;
+  background: linear-gradient(#3b2751, #271739);
+  text-shadow: 0 0 21px rgba(223, 206, 228, 0.5), 0 -1px 0 #311d47;
+  outline: 0 none;
+  transition: color 0.5s linear, text-shadow 0.5s linear;
+  &:hover {
+    transition: color 0.5s linear, text-shadow 0.5s linear;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(223, 206, 228, 0.5), 0 0 10px rgba(223, 206, 228, 0.4), 0 0 2px #2a153c;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
 
+  }
+
+}
+#count {
+  position: absolute;
+  left: 1150px;
+  top: 50px;
+  font-size: 20pt;
+  color: white;
+
+}
