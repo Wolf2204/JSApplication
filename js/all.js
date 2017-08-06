@@ -1,5 +1,100 @@
 (function () {
     'use strict';
+
+    let sumCards = 36;
+    let suitLength = sumCards / 4;
+
+    function Deck() {
+
+    }
+
+    Object.defineProperties(Deck.prototype, {
+        deckList: {
+            value: function (...arg) {
+                let suitCard = ['бубна', 'черви', 'пика', 'крести'];
+                let number = 0;
+                let deckLength = 'images/';
+
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 1; j <= suitLength; j++) {
+                        arg[i].push({
+                            val: j,
+                            card: deckLength + (j + number) + '.jpg',
+                            suit: suitCard[i],
+                            id: j + number
+                        })
+                    }
+                    number += 9;
+
+                }
+                return arg;
+            }
+        },
+
+        randomDeck: {
+         value: function (deck) {
+             function compareRandom(a, b) {
+                 return Math.random() - 0.5;
+             }
+             return deck.sort(compareRandom);
+         }   
+        },
+
+        suitValue: {
+            value: function (suit) {
+                for (let i = 0; i < suit.length; i++) {
+                    if (suit[0].suit === suit[i].suit) {
+                        suit[i].val = suit[i].val * 100;
+                    }
+                    
+                }
+            }
+        }
+
+    });
+
+
+    window.Deck = Deck;
+}());
+
+(function () {
+    'use strict';
+
+    function Players () {
+
+    }
+
+    Object.defineProperties(Players.prototype, {
+        handPlayers: {
+            value: function (computer, player, deck, deck1, deck2, deckOnPage) {
+
+                for (let i = 0; i < 6; i++) {
+                    let card1 = document.createElement('img'),
+                        card2 = document.createElement('img');
+                    let a = deck.pop();
+                    let b = deck.pop();
+                    computer.push(a);
+                    player.push(b);
+                    deck1.appendChild(card1);
+                    deck2.appendChild(card2);
+
+                }
+                deck.forEach(function () {
+                    let a = document.createElement('img');
+                    deckOnPage.appendChild(a)
+                });
+
+
+            }
+        }
+    });
+
+
+    window.Players = Players;
+}());
+
+(function () {
+    'use strict';
     let countPlayer = 0,
         countComputer = 0;
     let countPlayerHtml = document.querySelector('#playerCount'),
