@@ -26,7 +26,6 @@ section div.deck2 img {
 }
 section img.suit {
   transform: rotate(-90deg);
-  left: 1090px;
 }
 section #turn2 {
   position: fixed;
@@ -67,7 +66,4 @@ body .buttons {
   top: 50px;
   font-size: 20pt;
   color: white;
-}
-.invisibility {
-  display: none;
 }
